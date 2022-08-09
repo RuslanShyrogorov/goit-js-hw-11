@@ -26,3 +26,27 @@
   background-size: cover;
   background-position: center;
 }
+// ===================
+.search-form{
+  margin: 15px auto 20px;
+}
+
+.gallery {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+
+}
+
+.photo-card{
+height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.info{
+  display: flex;
+    justify-content: space-evenly;
+}
+
+
