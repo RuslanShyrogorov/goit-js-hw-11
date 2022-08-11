@@ -16,6 +16,13 @@ const API_KEY = '29156299-9f5b3ae85970160cb7d7e54e9';
 let searchText = '';
 let page = 1;
 
+function toggleModal() {
+    refs.loadMoreBtn.classList.toggle("is-hidden");
+};
+  
+function clearGallery() {
+  refs.gallery.innerHTML = '';
+};
 
 async function onSearchImges(event) {
   event.preventDefault();
@@ -24,12 +31,24 @@ async function onSearchImges(event) {
   console.log(searchText);
   // const { elements: { searchQuery } } = event.currentTarget
   // const searchText = searchQuery.value
+
   const url = `https://pixabay.com/api/?key=${API_KEY}&q=${searchText}&image_type=photo&orientation="horizontal"&safesearch="true"&per_page=40&page=${page}`
   try {
     const responce = await axios.get(url);
-    Notify.success(`We found ${responce.data.totalHits} photo`)
+
+    if (responce.data.hits.length > 0) {
+      Notify.success(`We found ${responce.data.totalHits} photo`)
+    } else {
+      Notify.failure(`Sorry, there are no images matching your search query. Please try again.`)
+    }
+
+    clearGallery();
+
     appendMarkupInGallery(responce.data.hits)
     console.log('responce: ', responce.data);
+    
+    toggleModal();
+
   } catch (error) {
     console.log(error);
   }
@@ -38,12 +57,13 @@ async function onSearchImges(event) {
 async function onLoadMoreImages() {
   page += 1;
   console.log(page);
+  toggleModal();
   const url = `https://pixabay.com/api/?key=${API_KEY}&q=${searchText}&image_type=photo&orientation="horizontal"&safesearch="true"&per_page=40&page=${page}`
   try {
     const responce = await axios.get(url);
     appendMarkupInGallery(responce.data.hits)
     console.log('responce: ', responce.data);
-    
+    toggleModal();
   } catch (error) {
     
   }
@@ -81,3 +101,4 @@ function appendMarkupInGallery(photo) {
 
 refs.form.addEventListener('submit', onSearchImges);
 refs.loadMoreBtn.addEventListener('click', onLoadMoreImages)
+
