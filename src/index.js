@@ -15,8 +15,9 @@ const refs = {
 const API_KEY = '29156299-9f5b3ae85970160cb7d7e54e9';
 let searchText = '';
 let page = 1;
+const PER_PAGE = 40;
 
-function toggleModal() {
+function toggleLoadMoreBtn() {
     refs.loadMoreBtn.classList.toggle("is-hidden");
 };
   
@@ -32,7 +33,7 @@ async function onSearchImges(event) {
   // const { elements: { searchQuery } } = event.currentTarget
   // const searchText = searchQuery.value
 
-  const url = `https://pixabay.com/api/?key=${API_KEY}&q=${searchText}&image_type=photo&orientation="horizontal"&safesearch="true"&per_page=40&page=${page}`
+  const url = `https://pixabay.com/api/?key=${API_KEY}&q=${searchText}&image_type=photo&orientation="horizontal"&safesearch="true"&per_page=${PER_PAGE}&page=${page}`
   try {
     const responce = await axios.get(url);
 
@@ -47,7 +48,11 @@ async function onSearchImges(event) {
     appendMarkupInGallery(responce.data.hits)
     console.log('responce: ', responce.data);
     
-    toggleModal();
+    toggleLoadMoreBtn();
+
+    if (responce.data.totalHits <= PER_PAGE) {
+      toggleLoadMoreBtn()
+    }
 
   } catch (error) {
     console.log(error);
@@ -57,15 +62,27 @@ async function onSearchImges(event) {
 async function onLoadMoreImages() {
   page += 1;
   console.log(page);
-  toggleModal();
-  const url = `https://pixabay.com/api/?key=${API_KEY}&q=${searchText}&image_type=photo&orientation="horizontal"&safesearch="true"&per_page=40&page=${page}`
+
+  toggleLoadMoreBtn();
+
+  const url = `https://pixabay.com/api/?key=${API_KEY}&q=${searchText}&image_type=photo&orientation="horizontal"&safesearch="true"&per_page=${PER_PAGE}&page=${page}`
   try {
     const responce = await axios.get(url);
+
     appendMarkupInGallery(responce.data.hits)
     console.log('responce: ', responce.data);
-    toggleModal();
+
+    toggleLoadMoreBtn();
+
+    let leftShowPhoto = responce.data.totalHits - (page * PER_PAGE);
+    console.log(leftShowPhoto);
+
+    if (leftShowPhoto <= 0) {
+      Notify.info(`We're sorry, but you've reached the end of search results.`)
+      toggleLoadMoreBtn()
+    }
   } catch (error) {
-    
+    console.log(error);
   }
 }
 
