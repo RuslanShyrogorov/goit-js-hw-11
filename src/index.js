@@ -115,7 +115,6 @@ function appendMarkupInGallery(photo) {
 }
 
 
-
 refs.form.addEventListener('submit', onSearchImges);
 refs.loadMoreBtn.addEventListener('click', onLoadMoreImages)
 

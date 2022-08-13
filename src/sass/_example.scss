@@ -54,6 +54,13 @@ img {
   object-fit: cover;
 }
 
+.search-form{
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+  margin-bottom: 24px;
+}
+
 .photo-card{
   display: flex;
   flex-wrap: wrap;
@@ -64,19 +71,23 @@ img {
   // justify-content: space-evenly;
 }
 button{
+  display: block;
   color: white;
-  background-color: rgba(0, 102, 255, 0.92);
+  background-color: #2196f3;
   border: inherit;
   border-radius: 4px;
   padding: 3px 10px;
+  margin-left: 5px;
 }
 button:hover{
   cursor: pointer;
-  background-color: rgb(0, 42, 255);
+  background-color: #188ce8;
 }
-.load-more{
+button.load-more{
   margin-top: 10px;
   padding: 5px 10px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .is-hidden{
